@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Healthcare App",
+            "request": "launch",
+            "mainClass": "project1.MainApp",
+            "projectName": "healthcare-appointment-system",
+            "env": {
+                "DB_USER": "your_db_user",
+                "DB_PASS": "your_db_password",
+                "DB_URL": "your_db_host",
+                "DB_NAME": "your_db_service",
+                "APP_USER": "admin",
+                "APP_PASS": "admin"
+            }
+        }
+    ]
+}

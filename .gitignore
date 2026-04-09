@@ -1,0 +1,39 @@
+# Compiled class files
+*.class
+target/
+
+# JAR files (especially Oracle JDBC driver - cannot be redistributed)
+*.jar
+
+# Maven
+.mvn/
+!.mvn/wrapper/
+
+# IDE files
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/settings.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Exported data files
+patient_records.txt
+appointment_records.txt
+
+# Compiled output
+bin/
+
+# Application database
+healthcare.db
+
+# Runtime logs
+run_app.log
+test_output.log
+
+# Environment files (never commit credentials)
+.env
