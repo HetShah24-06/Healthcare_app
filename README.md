@@ -143,7 +143,17 @@ Data operations use `PreparedStatement` with parameterized queries.
 
 ## Screenshots
 
-> _(Add screenshots of Login, Dashboard, Patient Form, and Appointment Form here)_
+<img width="427" height="338" alt="image" src="https://github.com/user-attachments/assets/383ffb80-5001-412a-af18-8941acfe8808" />
+-- Login Screen
+
+<img width="1130" height="788" alt="image" src="https://github.com/user-attachments/assets/0219621b-123a-4a44-be22-c84f7f016e60" />
+Dashboard Screen 
+
+<img width="632" height="793" alt="image" src="https://github.com/user-attachments/assets/adb9f438-714b-432d-9c26-5c5d41112105" />
+Manage Appointment screen 
+
+<img width="750" height="790" alt="image" src="https://github.com/user-attachments/assets/a2f3b5c8-aa6f-4a5e-ac42-054a6f031769" />
+Manage Patients Screen
 
 ---
 
