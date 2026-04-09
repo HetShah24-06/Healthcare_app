@@ -1,30 +1,30 @@
 # Healthcare Appointment Management System
 
-A JavaFX desktop application for managing patient records and appointments. This repository contains a course project built with Java 21, JavaFX 17, and SQLite for local storage.
+A JavaFX desktop application for managing patient records and appointments. Built with Java 21, JavaFX 17, and SQLite for local data storage.
 
 ---
 
 ## Features
 
-- **Login screen** with basic credential flow
-- **Dashboard** for patients and appointments
-- **Patient management**: create, view, edit, delete
-- **Appointment management**: create, view, edit, delete
-- **Export support** for saving records to files
-- **Background database operations** using `ExecutorService`
-- **Embedded SQLite** for quick, local setup
+- **Authentication** — Login screen with credential-based access control
+- **Dashboard** — Unified view for patients and appointments
+- **Patient management** — Create, view, edit, and delete patient records
+- **Appointment management** — Create, view, edit, and delete appointments
+- **Data export** — Save records to local files
+- **Concurrent DB operations** — Background tasks via `ExecutorService` + `Platform.runLater`
+- **Embedded SQLite** — Zero-config local database, auto-initialized on first run
 
 ---
 
 ## Tech Stack
 
-| Layer        | Technology                              |
-| ------------ | --------------------------------------- |
-| Language     | Java 21                                 |
-| UI Framework | JavaFX 17                               |
-| Database     | SQLite (embedded)                       |
-| Concurrency  | `ExecutorService` + `Platform.runLater` |
-| Build        | Maven                                   |
+| Layer | Technology |
+|---|---|
+| Language | Java 21 |
+| UI Framework | JavaFX 17 |
+| Database | SQLite (embedded via JDBC) |
+| Concurrency | `ExecutorService` + `Platform.runLater` |
+| Build | Maven |
 
 ---
 
@@ -33,49 +33,53 @@ A JavaFX desktop application for managing patient records and appointments. This
 ### Prerequisites
 
 - Java 21 or newer
-- Windows terminal: `cmd.exe` or PowerShell
-- Internet access on first run to download dependencies
+- Windows (cmd or PowerShell)
+- Internet access on first run (to download JavaFX SDK and SQLite JDBC driver)
 
-### Run the app
+### Quick Start
 
-Open a terminal in the project root and execute:
+Clone the repository and run the provided batch script from the project root:
 
 ```cmd
-cd C:\Users\HET\OneDrive\Desktop\JavaProject\healthcare-app
 run_app.bat
 ```
 
 This script will:
-- download the JavaFX SDK if needed
-- download the SQLite JDBC driver if needed
-- compile the project
-- launch the application
+1. Download the JavaFX SDK if not present
+2. Download the SQLite JDBC driver if not present
+3. Compile the project
+4. Launch the application
 
-### Verify the installation
+### Verify Setup
 
-To confirm the environment and application startup:
+To confirm the environment is configured correctly:
 
 ```cmd
 test_app.bat
 ```
 
-This script checks dependencies, compiles the app, and performs a simple startup verification.
+This checks dependencies, compiles the project, and performs a startup verification.
 
-### Run manually
+### Manual Compilation
 
-To compile and start the app manually:
+If you prefer to compile and run manually:
 
 ```cmd
-javac --module-path "lib\\javafx-sdk-17.0.6_windows-x64_bin-sdk/lib" --add-modules javafx.controls,javafx.fxml -cp "lib/sqlite-jdbc-3.42.0.0.jar" -d bin src/main/java/project1/*.java
-java --module-path "lib\\javafx-sdk-17.0.6_windows-x64_bin-sdk/lib" --add-modules javafx.controls,javafx.fxml -cp "bin;lib/sqlite-jdbc-3.42.0.0.jar" project1.MainApp
+javac --module-path "lib\javafx-sdk-17.0.6_windows-x64_bin-sdk\lib" ^
+  --add-modules javafx.controls,javafx.fxml ^
+  -cp "lib\sqlite-jdbc-3.42.0.0.jar" ^
+  -d bin src\main\java\project1\*.java
+
+java --module-path "lib\javafx-sdk-17.0.6_windows-x64_bin-sdk\lib" ^
+  --add-modules javafx.controls,javafx.fxml ^
+  -cp "bin;lib\sqlite-jdbc-3.42.0.0.jar" project1.MainApp
 ```
 
-### Upload to GitHub
+### Push to GitHub
 
-After creating a repository on GitHub, push this local project:
+After creating a repository on GitHub:
 
 ```cmd
-cd C:\Users\HET\OneDrive\Desktop\JavaProject\healthcare-app
 git remote add origin https://github.com/<your-username>/<repo-name>.git
 git push -u origin main
 ```
@@ -86,8 +90,8 @@ git push -u origin main
 
 ```
 src/main/java/project1/
-├── MainApp.java                # Application entry point and navigation manager
-├── LoginScreen.java            # Login UI and credential check
+├── MainApp.java                # Entry point and scene navigation manager
+├── LoginScreen.java            # Login UI and credential validation
 ├── Dashboard.java              # Main dashboard view
 ├── PatientForm.java            # Patient CRUD UI
 ├── AppointmentForm.java        # Appointment CRUD UI
@@ -96,68 +100,68 @@ src/main/java/project1/
 ├── PatientDataManager.java     # Patient DB operations
 ├── AppointmentDataManager.java # Appointment DB operations
 ├── DBConnector.java            # SQLite connection helper
-└── DBUtils.java                # SQL utility helpers
+└── DBUtils.java                # SQL utility methods
 ```
 
 ---
 
 ## Database Schema
 
-The application uses SQLite and creates tables automatically on first run:
+Tables are created automatically on first run:
 
 ```sql
 CREATE TABLE IF NOT EXISTS patients (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    age INTEGER,
-    medical_history TEXT,
-    contact_info TEXT
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    name             TEXT    NOT NULL,
+    age              INTEGER,
+    medical_history  TEXT,
+    contact_info     TEXT
 );
 
 CREATE TABLE IF NOT EXISTS appointments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    patient_id INTEGER,
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    patient_id       INTEGER,
     appointment_date TEXT,
-    reason TEXT,
+    reason           TEXT,
     FOREIGN KEY (patient_id) REFERENCES patients(id)
 );
 ```
 
 ---
 
-## Architecture Notes
+## Architecture
 
-### Scene navigation
+### Scene Navigation
 
-`MainApp` centralizes navigation and manages screen switching. Each view is displayed in a new `Stage` and uses the parent app object to call `showX()` methods.
+`MainApp` centralizes screen management. Each view is rendered in a `Stage` and navigates via `showX()` methods on the parent application object.
 
-### Background database operations
+### Background Database Operations
 
-Database tasks use a fixed `ExecutorService` thread pool. UI updates after database work are dispatched with `Platform.runLater()`.
+All database work runs on a fixed-size `ExecutorService` thread pool. UI updates after async DB calls are dispatched using `Platform.runLater()` to comply with JavaFX's single-threaded rendering model.
 
-### SQL safety
+### SQL Injection Prevention
 
-Data operations use `PreparedStatement` with parameterized queries.
+All data operations use `PreparedStatement` with parameterized queries — no raw string concatenation.
 
 ---
 
 ## Screenshots
 
-<img width="427" height="338" alt="image" src="https://github.com/user-attachments/assets/383ffb80-5001-412a-af18-8941acfe8808" />
--- Login Screen
+**Login Screen**
 
-<img width="1130" height="788" alt="image" src="https://github.com/user-attachments/assets/0219621b-123a-4a44-be22-c84f7f016e60" />
-Dashboard Screen 
+<img width="427" alt="Login Screen" src="https://github.com/user-attachments/assets/383ffb80-5001-412a-af18-8941acfe8808" />
 
-<img width="632" height="793" alt="image" src="https://github.com/user-attachments/assets/adb9f438-714b-432d-9c26-5c5d41112105" />
-Manage Appointment screen 
+**Dashboard**
 
-<img width="750" height="790" alt="image" src="https://github.com/user-attachments/assets/a2f3b5c8-aa6f-4a5e-ac42-054a6f031769" />
-Manage Patients Screen
+<img width="1130" alt="Dashboard Screen" src="https://github.com/user-attachments/assets/0219621b-123a-4a44-be22-c84f7f016e60" />
+
+**Manage Appointments**
+
+<img width="632" alt="Appointment Management Screen" src="https://github.com/user-attachments/assets/a2f3b5c8-aa6f-4a5e-ac42-054a6f031769" />
+
 
 ---
 
 ## License
 
-Developed for academic purposes at Humber Polytechnic.
-Not intended for production use.
+Developed for academic purposes at Humber Polytechnic. Not intended for production use.
